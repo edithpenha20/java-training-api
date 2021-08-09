@@ -40,7 +40,7 @@ public class User implements Serializable {
 		@Override
 		public LocalDate convert(String value) {
 			if (value != null) {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				return LocalDate.parse(value, formatter);
 			} else {
 				return null;
@@ -113,4 +113,14 @@ public class User implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", email='" + email + '\'' +
+				", cpf='" + cpf + '\'' +
+				", birthDate=" + birthDate +
+				'}';
+	}
 }
