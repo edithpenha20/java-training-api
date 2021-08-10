@@ -10,11 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
+import br.com.training.controller.dto.UserForm;
 
 @Entity
-public class User implements Serializable {
+public class User extends UserForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,19 +33,20 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private LocalDate birthDate;
 
-	@Component
-	public class LocalDateSpringConverter implements Converter<String, LocalDate> {
 
-		@Override
-		public LocalDate convert(String value) {
-			if (value != null) {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-				return LocalDate.parse(value, formatter);
-			} else {
-				return null;
-			}
-		}
-	}
+	//	@Component
+//	public class LocalDateSpringConverter implements Converter<String, LocalDate> {
+//
+//		@Override
+//		public LocalDate convert(String value) {
+//			if (value != null) {
+//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//				return LocalDate.parse(value, formatter);
+//			} else {
+//				return null;
+//			}
+//		}
+//	}
 
 	public LocalDate getBirthDate() {
 		return birthDate;

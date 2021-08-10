@@ -1,43 +1,61 @@
 package br.com.training.service;
 
+import br.com.training.controller.dto.UserForm;
+import br.com.training.controller.dto.UserResponse;
+import br.com.training.exception.ObjectNotFoundException;
+import br.com.training.mapper.UserMapper;
 import br.com.training.model.User;
 import br.com.training.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
 
 @Service
 public class UserService {
 
     @Autowired
+    private UserMapper mapper;
+
+    @Autowired
     private UserRepository userRepository;
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    @Transactional
+    public UserForm createUser(UserForm userForm) {
+        User userToSave = mapper.toEntity(userForm);
+        userRepository.save(userToSave);
+        return mapper.toRequest(userToSave);
     }
 
-    public Optional<User> getUser(String cpf) {
-        return userRepository.findByCpf(cpf);
+    @Transactional
+    public UserResponse getUser(String cpf) {
+        return userRepository.findByCpf(cpf)
+                .map(mapper::toResponse)
+                .orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado"));
     }
 
-    public User updateUser(User user, String cpf) {
+    @Transactional
+    public UserForm updateUser(UserForm userForm, String cpf) {
+
         Optional<User> u = userRepository.findByCpf(cpf);
         if (u.isPresent()) {
             User userDB = u.get();
-            userDB.setName(user.getName());
-            userDB.setEmail(user.getEmail());
-            userDB.setCpf(user.getCpf());
-            userDB.setBirthDate(user.getBirthDate());
+            userDB.setName(userForm.getName());
+            userDB.setEmail(userForm.getEmail());
+            userDB.setCpf(userForm.getCpf());
+            userDB.setBirthDate(userForm.getBirthDate());
 
-            return  userRepository.save(userDB);
+            userRepository.save(userDB);
+            return mapper.toRequest(userDB);
         } else {
             return null;
         }
     }
 
-    public Optional<User> deleteUser(String cpf) {
-        userRepository.findByCpf(cpf);
-        return userRepository.deleteByCpf(cpf);
+    @Transactional
+    public void deleteUser(String cpf) {
+        userRepository.deleteByCpf(cpf);
     }
 }

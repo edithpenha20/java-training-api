@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Transactional
     Optional<User> findByCpf(String cpf);
 
     @Transactional
