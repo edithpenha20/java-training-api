@@ -2,16 +2,18 @@ package br.com.training.controller;
 
 import br.com.training.controller.dto.UserForm;
 import br.com.training.controller.dto.UserResponse;
+import br.com.training.exception.ObjectNotFoundException;
+import br.com.training.mapper.UserMapper;
+import br.com.training.model.User;
 import br.com.training.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 
 @RestController
@@ -20,37 +22,36 @@ import java.net.URI;
 public class UserController {
 
 	@Autowired
+	private UserMapper mapper;
+
+	@Autowired
 	private UserService userService;
 
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserForm> createUser(@Valid @RequestBody UserForm userForm) {
-		UserForm u = userService.createUser(userForm);
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{cpf}")
-				.buildAndExpand(u.getCpf())
-				.toUri();
-		return ResponseEntity.created(location).build();
+	@PostMapping
+	public ResponseEntity<User> createUser(@RequestBody @Valid UserForm userForm) {
+
+		return new ResponseEntity<>(userService.createUser(userForm), HttpStatus.CREATED);
 	}
 
 	@GetMapping (value = "/{cpf}")
-    public ResponseEntity<UserResponse> getUser (@PathVariable String cpf){
-		UserResponse userResponse = userService.getUser(cpf);
-		return ResponseEntity.ok(userResponse);
+    public UserResponse getUser (@PathVariable String cpf){
+		return userService.getUser(cpf)
+				.map(mapper::toResponse)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//		UserResponse userResponse = userService.getUser(cpf);
+//		return ResponseEntity.ok(userResponse);
     }
 
     @PutMapping (value = "/{cpf}")
-    public ResponseEntity<UserForm> updateUser (@PathVariable String cpf, @Valid @RequestBody UserForm userForm) {
-		UserForm u = userService.updateUser(userForm, cpf);
-		return u != null ?
-				ResponseEntity.ok(u) :
-				ResponseEntity.notFound().build();
+    public ResponseEntity<Void> updateUser (@PathVariable String cpf, @Valid @RequestBody UserForm userForm) {
+		userService.updateUser(userForm, cpf);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@DeleteMapping (value = "/{cpf}")
-	public ResponseEntity deleteUser (@PathVariable String cpf) {
+	public ResponseEntity<Void> deleteUser (@PathVariable String cpf) {
 		userService.deleteUser(cpf);
-		return ResponseEntity.ok().build();
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }

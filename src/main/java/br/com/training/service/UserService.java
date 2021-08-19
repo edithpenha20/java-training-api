@@ -19,25 +19,30 @@ public class UserService {
     @Autowired
     private UserMapper mapper;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Transactional
-    public UserForm createUser(UserForm userForm) {
-        User userToSave = mapper.toEntity(userForm);
-        userRepository.save(userToSave);
-        return mapper.toRequest(userToSave);
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public UserResponse getUser(String cpf) {
-        return userRepository.findByCpf(cpf)
-                .map(mapper::toResponse)
-                .orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado"));
+    public User createUser(UserForm userForm) {
+        return userRepository.save(mapper.toEntity(userForm));
+//        User userToSave = mapper.toEntity(userForm);
+//        return userRepository.save(userToSave);
     }
 
     @Transactional
-    public UserForm updateUser(UserForm userForm, String cpf) {
+    public Optional<User> getUser(String cpf) {
+        return userRepository.findByCpf(cpf);
+//        return userRepository.findByCpf(cpf)
+//                .map(mapper::toResponse)
+//                .orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
+    }
+
+    @Transactional
+    public User updateUser(UserForm userForm, String cpf) {
 
         Optional<User> u = userRepository.findByCpf(cpf);
         if (u.isPresent()) {
@@ -47,8 +52,8 @@ public class UserService {
             userDB.setCpf(userForm.getCpf());
             userDB.setBirthDate(userForm.getBirthDate());
 
-            userRepository.save(userDB);
-            return mapper.toRequest(userDB);
+            mapper.toEntity(userDB);
+            return userRepository.save(userDB);
         } else {
             return null;
         }

@@ -1,9 +1,9 @@
 package br.com.training.controller.dto;
 
-import br.com.training.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class UserResponse {
 
@@ -46,5 +46,18 @@ public class UserResponse {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserResponse that = (UserResponse) o;
+        return Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(cpf, that.cpf) && Objects.equals(birthDate, that.birthDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, cpf, birthDate);
     }
 }

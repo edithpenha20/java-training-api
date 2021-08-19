@@ -5,6 +5,8 @@ import br.com.training.controller.dto.UserResponse;
 import br.com.training.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UserMapper {
 
@@ -34,4 +36,5 @@ public class UserMapper {
         userResponse.setBirthDate(user.getBirthDate());
         return userResponse;
     }
+
 }

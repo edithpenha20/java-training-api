@@ -2,7 +2,6 @@ package br.com.training.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,6 +46,7 @@ public class User extends UserForm implements Serializable {
 //			}
 //		}
 //	}
+
 
 	public LocalDate getBirthDate() {
 		return birthDate;
@@ -123,4 +123,5 @@ public class User extends UserForm implements Serializable {
 				", birthDate=" + birthDate +
 				'}';
 	}
+
 }
