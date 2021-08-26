@@ -15,7 +15,7 @@ public class UserUtils {
 
     private static final String NAME = "Endy";
     private static final String EMAIL = "endy@gmail.com";
-    private static final String CPF_NUMBER = "804.732.102-15";
+    private static final String CPF_NUMBER = "000.000.000-00";
     private static final long USER_ID = 1L;
     public static final LocalDate BIRTH_DATE = LocalDate.of(1985, 07, 13);
 
