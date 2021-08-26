@@ -53,7 +53,7 @@ public class ControllersTest {
     void getByCpfAndReturnUserWhenSuccessful() {
         String expectedCpf = UserUtils.createFakeUser().getCpf();
 
-        UserResponse user = userController.getUser("804.732.102-15").getBody();
+        UserResponse user = userController.getUser("000.000.000-00").getBody();
 
         assertThat(user).isNull();
         //assertThat(user.getCpf()).isNotNull().isEqualTo(expectedCpf);
