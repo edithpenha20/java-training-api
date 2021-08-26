@@ -15,11 +15,10 @@ public class UserUtils {
 
     private static final String NAME = "Endy";
     private static final String EMAIL = "endy@gmail.com";
-    private static final String CPF_NUMBER = "000.000.000-00";
+    private static final String CPF_NUMBER = "804.732.102-15";
     private static final long USER_ID = 1L;
     public static final LocalDate BIRTH_DATE = LocalDate.of(1985, 07, 13);
 
-    private UserMapper mapper = new UserMapper();
 
     public static User createFakeUser(){
         User user = new User();
@@ -40,20 +39,19 @@ public class UserUtils {
         return userForm;
     }
 
-    UserForm form = createFakeUserForm();
-    User user = mapper.toEntity(form);
 
-//    public static User convertUserFakeUserDTO(UserForm userDTO){
-//        User user = new User();
-//        user.setName(userDTO.getName());
-//        user.setEmail(userDTO.getEmail());
-//        user.setCpf(userDTO.getCpf());
-//        user.setBirthDate(userDTO.getBirthDate());
-//        return user;
-//    }
+    public static User convertUserFakeUserDTO(UserForm userDTO){
+        User user = new User();
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setCpf(userDTO.getCpf());
+        user.setBirthDate(userDTO.getBirthDate());
+        return user;
+    }
 
     public static UserResponse createFakeUserResponse(){
         UserResponse userResponse = new UserResponse();
+        userResponse.setId(USER_ID);
         userResponse.setName(NAME);
         userResponse.setEmail(EMAIL);
         userResponse.setCpf(CPF_NUMBER);

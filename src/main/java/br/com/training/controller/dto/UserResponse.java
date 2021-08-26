@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class UserResponse {
 
+    private Long id;
+
     private String name;
 
     private String email;
@@ -15,6 +17,24 @@ public class UserResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
+
+    public UserResponse() {
+    }
+
+    public UserResponse(String name, String email, String cpf, LocalDate birthDate) {
+        this.name = name;
+        this.email = email;
+        this.cpf = cpf;
+        this.birthDate = birthDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

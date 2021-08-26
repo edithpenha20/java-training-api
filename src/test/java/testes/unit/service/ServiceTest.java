@@ -1,7 +1,5 @@
 package testes.unit.service;
 
-import br.com.training.controller.dto.UserForm;
-import br.com.training.controller.dto.UserResponse;
 import br.com.training.mapper.UserMapper;
 import br.com.training.model.User;
 import br.com.training.repository.UserRepository;
@@ -11,11 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import testes.unit.utils.UserUtils;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,43 +30,36 @@ public class ServiceTest {
     private UserRepository userRepository;
 
     @Mock
-    private UserMapper mapper = mock(UserMapper.class);
+    private UserMapper mapper;
 
     @BeforeEach
     void setup() {
 
         when(userRepository.findByCpf(anyString())).thenReturn(Optional.of(UserUtils.createFakeUser()));
 
-        //when(userRepository.save(any(User.class))).thenReturn(Optional.of(UserUtils.createFakeUser()));
-
-        when(userRepository.save(any(User.class))).thenReturn(UserUtils.createFakeUser());
+        User entity = mapper.toEntity(UserUtils.createFakeUserForm());
+        when(userRepository.save(entity)).thenReturn(UserUtils.createFakeUser());
 
         doNothing().when(userRepository).delete(any(User.class));
     }
 
     @Test
     void getByCpfAndReturnUserWhenSuccessful() {
-//        String expectedCpf = UserUtils.createFakeUserResponse().getCpf();
-//        assertThat(expectedCpf).isNotNull().isEqualTo(response.get().getCpf());
+        String expectedCpf = UserUtils.createFakeUserResponse().getCpf();
 
-        UserResponse expectedCpf = UserUtils.createFakeUserResponse();
-        Optional<User> response = userService.getUser("000.000.000-00");
+        User response = userService.getUser("804.732.102-15");
 
-        assertThat(expectedCpf.getName()).isNotNull().isEqualTo(response.get().getName());
-        assertThat(expectedCpf.getEmail()).isNotNull().isEqualTo(response.get().getEmail());
-        assertThat(expectedCpf.getCpf()).isNotNull().isEqualTo(response.get().getCpf());
-        assertThat(expectedCpf.getBirthDate()).isNotNull().isEqualTo(response.get().getBirthDate());
+        assertThat(response.getCpf()).isNotNull().isEqualTo(expectedCpf);
     }
 
     @Test
     void createUserAndReturnUserWhenSuccessful() {
 
-//        UserForm form = UserUtils.createFakeUserForm();
-//        User userDTO = mapper.toEntity(form);
-//
-//        User user = userService.createUser(userDTO);
+        User form = UserUtils.createFakeUser();
 
-//        User user = UserUtils.createFakeUser();
+        User user = userService.createUser(UserUtils.createFakeUser());
+
+        assertThat(user.getName()).isNotNull().isEqualTo(form.getName());
 
     }
 

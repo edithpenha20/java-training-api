@@ -23,6 +23,15 @@ public class UserForm {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 
+    public UserForm() {
+    }
+
+    public UserForm(String name, String email, String cpf, LocalDate birthDate) {
+        this.name = name;
+        this.email = email;
+        this.cpf = cpf;
+        this.birthDate = birthDate;
+    }
 
     public String getName() {
         return name;

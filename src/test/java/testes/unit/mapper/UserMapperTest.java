@@ -1,6 +1,7 @@
 package testes.unit.mapper;
 
 import br.com.training.controller.dto.UserForm;
+import br.com.training.controller.dto.UserResponse;
 import br.com.training.mapper.UserMapper;
 import br.com.training.model.User;
 import org.junit.jupiter.api.Test;
@@ -22,5 +23,13 @@ public class UserMapperTest {
         User user = mapper.toEntity(form);
 
         assertEquals(form.getName(), user.getName());
+    }
+
+    @Test
+    void entityForResponse() {
+        User user = UserUtils.createFakeUser();
+        UserResponse response = mapper.toResponse(user);
+
+        assertEquals(user.getName(), response.getName());
     }
 }

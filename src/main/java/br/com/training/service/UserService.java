@@ -16,29 +16,27 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
+
     private UserMapper mapper;
 
     private UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserMapper mapper, UserRepository userRepository) {
+        this.mapper = mapper;
         this.userRepository = userRepository;
     }
 
     @Transactional
     public User createUser(UserForm userForm) {
         return userRepository.save(mapper.toEntity(userForm));
-//        User userToSave = mapper.toEntity(userForm);
-//        return userRepository.save(userToSave);
     }
 
     @Transactional
-    public Optional<User> getUser(String cpf) {
-        return userRepository.findByCpf(cpf);
-//        return userRepository.findByCpf(cpf)
-//                .map(mapper::toResponse)
-//                .orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
+    public User getUser(String cpf) {
+        Optional<User> user = userRepository.findByCpf(cpf);
+        return user.orElseThrow(() -> new ObjectNotFoundException(
+                "Usuário não encontrado! CPF: " + cpf + ", Tipo: " + User.class.getName()));
     }
 
     @Transactional

@@ -32,6 +32,16 @@ public class User extends UserForm implements Serializable {
 	@Column(nullable = false)
 	private LocalDate birthDate;
 
+	public User() {
+	}
+
+	public User (Long id, String name, String email, String cpf, LocalDate birthDate) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.cpf = cpf;
+		this.birthDate = birthDate;
+	}
 
 	//	@Component
 //	public class LocalDateSpringConverter implements Converter<String, LocalDate> {

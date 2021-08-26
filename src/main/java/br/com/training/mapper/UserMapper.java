@@ -30,6 +30,7 @@ public class UserMapper {
 
     public UserResponse toResponse(User user) {
         UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
         userResponse.setName(user.getName());
         userResponse.setEmail(user.getEmail());
         userResponse.setCpf(user.getCpf());

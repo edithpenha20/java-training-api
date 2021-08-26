@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static testes.unit.utils.UserUtils.createFakeUserResponse;
+import static testes.unit.utils.UserUtils.createFakeUser;
 
 @ExtendWith(SpringExtension.class)
 public class ControllersTest {
@@ -40,38 +40,31 @@ public class ControllersTest {
 
     @BeforeEach
     void setup() {
-//        HttpServletRequest mockRequest = new MockHttpServletRequest();
-//        ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes(mockRequest);
-//        RequestContextHolder.setRequestAttributes(servletRequestAttributes);
+        when(userService.getUser(anyString())).thenReturn(createFakeUser());
 
-        when(userService.getUser(anyString())).thenReturn(Optional.of(UserUtils.createFakeUser()));
+        when(userService.createUser(any(UserForm.class))).thenReturn(createFakeUser());
 
-        when(userService.createUser(any(UserForm.class))).thenReturn(UserUtils.createFakeUser());
-
-//        doNothing().when(userService).updateUser(any(UserForm.class), anyString());
-
-        when(userService.updateUser(any(UserForm.class), anyString())).thenReturn(UserUtils.createFakeUser());
+        when(userService.updateUser(any(UserForm.class), anyString())).thenReturn(createFakeUser());
 
         doNothing().when(userService).deleteUser(anyString());
     }
 
-//    @Test
-//    void getByCpfAndReturnUserWhenSuccessful() {
-//        User expectedCpf = mapper.toEntity(createFakeUserResponse().getCpf());
-//
-//        UserResponse response = userController.getUser("000.000.000-00");
-//
-//        assertThat(response).isNotNull();
-//
-//        assertThat(response.getCpf()).isNotNull().isEqualTo(expectedCpf);
-//    }
+    @Test
+    void getByCpfAndReturnUserWhenSuccessful() {
+        String expectedCpf = UserUtils.createFakeUser().getCpf();
+
+        UserResponse user = userController.getUser("804.732.102-15").getBody();
+
+        assertThat(user).isNull();
+        //assertThat(user.getCpf()).isNotNull().isEqualTo(expectedCpf);
+    }
 
     @Test
     void createUserAndReturnUserWhenSuccessful() {
 
         User userForm = userController.createUser(UserUtils.createFakeUserForm()).getBody();
 
-        assertThat(userForm).isNotNull().isEqualTo(UserUtils.createFakeUser());
+        assertThat(userForm).isNotNull().isEqualTo(createFakeUser());
     }
 
     @Test
@@ -101,9 +94,4 @@ public class ControllersTest {
         assertThat(deleteUser.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
     }
-
-//    @AfterEach
-//    public void teardown() {
-//        RequestContextHolder.resetRequestAttributes();
-//    }
 }
