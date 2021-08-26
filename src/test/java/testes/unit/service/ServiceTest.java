@@ -47,7 +47,7 @@ public class ServiceTest {
     void getByCpfAndReturnUserWhenSuccessful() {
         String expectedCpf = UserUtils.createFakeUserResponse().getCpf();
 
-        User response = userService.getUser("804.732.102-15");
+        User response = userService.getUser("000.000.000-00");
 
         assertThat(response.getCpf()).isNotNull().isEqualTo(expectedCpf);
     }
